@@ -73,12 +73,15 @@ def test_still_has_questions(two_questions_quiz):
 # ----------------------------
 def test_next_question(single_question_quiz):
     """
-    Test that next_question returns the correct question and answer tuple.
+    Test that next_question returns the correct question and answer tuple,
+    and increments the question number.
     """
     quiz, q = single_question_quiz
     question_text, correct_answer = quiz.next_question()
     assert question_text == q.question
     assert correct_answer == q.answer
+    _, total = quiz.get_score()
+    assert total == 1
 
 # ----------------------------
 # Test get_score method after multiple answers
@@ -93,10 +96,11 @@ def test_multiple_answers():
     q3 = Question("Q3?", "True")
     quiz = QuizBrain([q1, q2, q3])
 
-    # Simulate answers
-    quiz.check_answer("true", q1.answer)  # correct
-    quiz.check_answer("true", q2.answer)  # incorrect
-    quiz.check_answer("true", q3.answer)  # correct
+    # Use next_question() to increment question_number
+    answers = ["true", "true", "true"]  # 2 correct, 1 incorrect
+    for user_answer in answers:
+        question_text, correct_answer = quiz.next_question()
+        quiz.check_answer(user_answer, correct_answer)
 
     score, total = quiz.get_score()
     assert score == 2
