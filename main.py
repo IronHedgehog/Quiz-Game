@@ -13,7 +13,7 @@ def create_question_bank(data):
        Returns:
            List[Question]: List of Question objects.
        """
-    return [Question(item["text"], item["answer"]) for item in data]
+    return [Question(item["question"], item["correct_answer"]) for item in data]
 
 
 question_bank = create_question_bank(question_data)
